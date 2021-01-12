@@ -39,10 +39,10 @@ namespace ChinookSystem.Entities
 
         [Required]
         public int Milliseconds { get; set; }
-        public Byte MyProperty { get; set; }
+        public int? Bytes { get; set; }
 
         [Required]
-        public double UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
         public virtual Album Album { get; set; }
         public virtual MediaType MediaType { get; set; }
