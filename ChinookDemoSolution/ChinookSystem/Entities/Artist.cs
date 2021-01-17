@@ -12,23 +12,23 @@ using System.ComponentModel.DataAnnotations;
 namespace ChinookSystem.Entities
 {
     [Table("Artists")]
-     internal class Artist
+    internal class Artist
     {
         private string _Name;
 
         [Key]
         public int ArtistId { get; set; }
 
-        [StringLength(120, ErrorMessage ="Artist name is limited to 120 characters")]
-        public string Name 
+        //[Required(ErrorMessage = "Artist name is required.")]
+        [StringLength(120,ErrorMessage ="Artist name is limited to 120 characters.")]
+        public string Name
         {
             get { return _Name; }
             set { _Name = string.IsNullOrEmpty(value) ? null : value; }
         }
 
-        //navigational properties
+        //navigatinal properties
         // 1 to many relationship; create the many relationship in this entity
-
         public virtual ICollection<Album> Albums { get; set; }
     }
 }

@@ -19,16 +19,16 @@ namespace ChinookSystem.Entities
         [Key]
         public int MediaTypeId { get; set; }
 
-        [StringLength(120, ErrorMessage ="MediaType name is limited to 120 characters")]
+        //[Required(ErrorMessage = " name is required.")]
+        [StringLength(120, ErrorMessage = "MediaType name is limited to 120 characters.")]
         public string Name
         {
             get { return _Name; }
-            set
-            {
-                _Name = string.IsNullOrEmpty(value) ? null : value;
-            }
+            set { _Name = string.IsNullOrEmpty(value) ? null : value; }
         }
 
+        //navigatinal properties
+        // 1 to many relationship; create the many relationship in this entity
         public virtual ICollection<Track> Tracks { get; set; }
     }
 }
