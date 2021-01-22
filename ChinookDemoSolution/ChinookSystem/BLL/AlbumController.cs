@@ -18,10 +18,10 @@ namespace ChinookSystem.BLL
     {
         //due to the fact that the entities are internal
         //  you CAN NOT use the entity class as a return datatype
-        [DataObjectMethod(DataObjectMethodType.Select,false)]
-        public List<ArtistAlbums>  Albums_GetArtistAlbums()
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<ArtistAlbums> Albums_GetArtistAlbums()
         {
-            using(var context = new ChinookSystemContext())
+            using (var context = new ChinookSystemContext())
             {
                 //Linq to Entity
 
@@ -35,6 +35,7 @@ namespace ChinookSystem.BLL
                 return results.ToList();
             }
         }
+
 
         [DataObjectMethod(DataObjectMethodType.Select, false)]
         public List<ArtistAlbums> Albums_GetAlbumsForArtist(int artistid)
@@ -55,7 +56,6 @@ namespace ChinookSystem.BLL
                 return results.ToList();
             }
         }
-
 
         [DataObjectMethod(DataObjectMethodType.Select, false)]
         public List<AlbumItem> Albums_List()

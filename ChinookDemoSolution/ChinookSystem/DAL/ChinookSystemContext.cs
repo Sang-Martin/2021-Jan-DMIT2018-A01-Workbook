@@ -7,7 +7,7 @@ using System.Linq;
 using ChinookSystem.Entities;
 #endregion
 
-namespace ChinookSystem.Entities
+namespace ChinookSystem.DAL
 {
     internal partial class ChinookSystemContext : DbContext
     {
