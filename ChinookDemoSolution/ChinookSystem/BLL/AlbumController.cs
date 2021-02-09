@@ -16,12 +16,13 @@ namespace ChinookSystem.BLL
     [DataObject]
     public class AlbumController
     {
+        #region Queries
         //due to the fact that the entities are internal
         //  you CAN NOT use the entity class as a return datatype
-        [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public List<ArtistAlbums> Albums_GetArtistAlbums()
+        [DataObjectMethod(DataObjectMethodType.Select,false)]
+        public List<ArtistAlbums>  Albums_GetArtistAlbums()
         {
-            using (var context = new ChinookSystemContext())
+            using(var context = new ChinookSystemContext())
             {
                 //Linq to Entity
 
@@ -36,7 +37,25 @@ namespace ChinookSystem.BLL
             }
         }
 
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<AlbumDecades> Albums_ListAlbumsByDecade()
+        {
+            using (var context = new ChinookSystemContext())
+            {
+                //Linq to Entity
 
+                IEnumerable<AlbumDecades> results = from x in context.Albums
+                                                    select new AlbumDecades
+                                                    {
+                                                        Title = x.Title,
+                                                        Year = x.ReleaseYear,
+                                                        Decade = x.ReleaseYear >= 1970 && x.ReleaseYear < 1980 ? "70's" :
+                                                                 x.ReleaseYear >= 1980 && x.ReleaseYear < 1990 ? "80's" :
+                                                                 x.ReleaseYear >= 1990 && x.ReleaseYear < 2000 ? "90's" : "others"
+                                                    };
+                return results.ToList();
+            }
+        }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
         public List<ArtistAlbums> Albums_GetAlbumsForArtist(int artistid)
         {
@@ -57,24 +76,23 @@ namespace ChinookSystem.BLL
             }
         }
 
-        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        [DataObjectMethod(DataObjectMethodType.Select,false)]
         public List<AlbumItem> Albums_List()
         {
-            using(var context = new ChinookSystemContext())
+            using (var context = new ChinookSystemContext())
             {
                 IEnumerable<AlbumItem> results = from x in context.Albums
                                                     select new AlbumItem
-                                                    {
+                                                    { 
                                                         AlbumId = x.AlbumId,
                                                         Title = x.Title,
+                                                        ArtistId = x.ArtistId,
                                                         ReleaseYear = x.ReleaseYear,
-                                                        ReleaseLabel = x.ReleaseLabel,
-                                                        ArtistId = x.ArtistId
+                                                        ReleaseLabel = x.ReleaseLabel
                                                     };
                 return results.ToList();
             }
         }
-
 
         [DataObjectMethod(DataObjectMethodType.Select, false)]
         public AlbumItem Albums_FindById(int albumid)
@@ -87,28 +105,28 @@ namespace ChinookSystem.BLL
                                     {
                                         AlbumId = x.AlbumId,
                                         Title = x.Title,
+                                        ArtistId = x.ArtistId,
                                         ReleaseYear = x.ReleaseYear,
-                                        ReleaseLabel = x.ReleaseLabel,
-                                        ArtistId = x.ArtistId
+                                        ReleaseLabel = x.ReleaseLabel
                                     }).FirstOrDefault();
                 return results;
             }
         }
-
+        #endregion
 
         #region Add, Update, Delete (CRUD)
 
-        #region Add
-
-        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        [DataObjectMethod(DataObjectMethodType.Insert,false)]
         public int Albums_Add(AlbumItem item)
         {
             using(var context = new ChinookSystemContext())
             {
-                //need to move the data from the viewmodel class into an entity instance BEFORE staging
-                
-                //The PK of the Albums table is an Identity() PK
-                //  therefore you do NOT need to supply
+                //need to move the data from the viewmodel class into
+                //  an entity instance BEFORE staging
+
+                //the pkey of the Albums table is an Identity() pKey
+                //    therefore you do NOT need to supply the AlbumId value
+
                 Album entityItem = new Album
                 {
                     Title = item.Title,
@@ -120,10 +138,13 @@ namespace ChinookSystem.BLL
                 //stagging is to local memory
                 context.Albums.Add(entityItem);
 
-                //At this point, the PK value is NOT available
+                //At this point, the new pkey value is NOT available
+                //the new pkey value is created by the database
 
-                //commit is the action of sending your request to the database for action
-                //Also, any validation annotation in your entity definition class is executed during this command
+                //commit is the action of sending your request to
+                //    the database for action.
+                //Also, any validation annotation in your entity definition class
+                //    is execute during this command
                 context.SaveChanges();
                 //since I have an int as the return datatype
                 //  I will return the new identity value
@@ -131,63 +152,50 @@ namespace ChinookSystem.BLL
             }
         }
 
-        #endregion
-
-        #region Update
-
         [DataObjectMethod(DataObjectMethodType.Update, false)]
-        public int Albums_Update(AlbumItem item)
+        public void Albums_Update(AlbumItem item)
         {
             using (var context = new ChinookSystemContext())
             {
-                //need to move the data from the viewmodel class into an entity instance BEFORE staging
+                //need to move the data from the viewmodel class into
+                //  an entity instance BEFORE staging
 
-                //on UPDATE you NEED to supply the table's PK value
+                //on update you NEED to supply the table's pkey value
                 Album entityItem = new Album
                 {
+                    AlbumId = item.AlbumId,
                     Title = item.Title,
                     ArtistId = item.ArtistId,
                     ReleaseYear = item.ReleaseYear,
                     ReleaseLabel = item.ReleaseLabel
                 };
 
-                //stagging
+                //stagging is to local memory
                 context.Entry(entityItem).State = System.Data.Entity.EntityState.Modified;
-                //commit
+                //commit is the action of sending your request to
+                //    the database for action.
                 context.SaveChanges();
-                //since I have an int as the return datatype
-                //  I will return the new identity value
-                return entityItem.AlbumId;
+               
             }
         }
 
-        #endregion
-
-        #region Delete
-
-        [DataObjectMethod(DataObjectMethodType.Delete, false)]
+        [DataObjectMethod(DataObjectMethodType.Delete,false)]
         public void Albums_Delete(AlbumItem item)
         {
-            using (var context = new ChinookSystemContext())
-            {
-                //this method will call the actual delete method and pass it
-                //   the only need piece of data: PK
-                Albums_Delete_Single(item.AlbumId);
-            }
+            //this method will call the actual delete method and pass it
+            //   the only need piece of data: pkey
+            Albums_Delete(item.AlbumId);
         }
 
-        public void Albums_Delete_Single(int albumid)
+        public void Albums_Delete(int albumid)
         {
-            using(var context = new ChinookSystemContext())
+            using (var context = new ChinookSystemContext())
             {
                 var exists = context.Albums.Find(albumid);
                 context.Albums.Remove(exists);
                 context.SaveChanges();
             }
         }
-
-        #endregion
-
         #endregion
     }
 }

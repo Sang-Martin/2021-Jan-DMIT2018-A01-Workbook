@@ -1,11 +1,12 @@
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Spatial;
+
 namespace ChinookSystem.Entities
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     internal partial class Artist
     {
         private string _Name;
@@ -18,11 +19,11 @@ namespace ChinookSystem.Entities
 
         public int ArtistId { get; set; }
 
-        [StringLength(120)]
+        [StringLength(120,ErrorMessage ="Artist name is limited to 120 characters")]
         public string Name 
-        {
-            get { return _Name; }
-            set { _Name = string.IsNullOrEmpty(value) ? null : value; }
+        { 
+            get { return _Name; } 
+            set { _Name = string.IsNullOrEmpty(value) ? null : value; } 
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

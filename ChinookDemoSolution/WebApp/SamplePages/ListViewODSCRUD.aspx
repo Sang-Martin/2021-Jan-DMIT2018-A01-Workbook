@@ -3,30 +3,29 @@
 <%@ Register Src="~/UserControls/MessageUserControl.ascx" TagPrefix="uc1" TagName="MessageUserControl" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h1>Single control ODS CRUD: ListView</h1>
+    <h1> Single control ODS CRUD : ListView</h1>
     <div class="row">
         <div class="offset-2">
             <blockquote class="alert alert-info">
-                <p>This page will use the asp:ListView control</p>
-                <p>This page will use ObjectDataSource with the ListView control</p>
-                <p>This page will use minumum code behind</p>
-                <p>This page will use the MessageUserControl for Error handling</p>
-                <p>This page will demonstrate validation on the asp:ListView control</p>
+                This page will use the asp:Listview control<br />
+                This page will use ObjectDataSource with the ListView control<br /> 
+                This page will use minimum code behind<br />
+                This page will use the MessageUserControl for error handling<br />
+                This page will demonstrate validation on the asp:Listview control<br />
             </blockquote>
         </div>
     </div>
-
     <div class="row">
         <div class="offset-1">
-            <uc1:MessageUserControl runat="server" id="MessageUserControl" />
-            <%-- V --%>
-            <asp:ValidationSummary ID="ValidationSummaryEdit" runat="server" HeaderText="Following are concerns with your data:"
+            <uc1:MessageUserControl runat="server" ID="MessageUserControl" />
+            <asp:ValidationSummary ID="ValidationSummaryEdit" runat="server" 
+                 HeaderText="Following are concerns with your data:"
                  ValidationGroup="egroup"/>
-            <asp:ValidationSummary ID="ValidationSummaryInsert" runat="server" HeaderText="Following are concerns with your data:"
+            <asp:ValidationSummary ID="ValidationSummaryInsert" runat="server" 
+                 HeaderText="Following are concerns with your data:"
                  ValidationGroup="igroup"/>
         </div>
     </div>
-
     <div class="row">
         <div class="offset-2">
         <%-- REMINDER: to use the attribute DataKeyNames to get the
@@ -303,32 +302,27 @@
                 </tr>
             </SelectedItemTemplate>
         </asp:ListView>
-
-        <%-- ODS for ListView --%>
-        <%-- Add ...Method and On... --%>
         <asp:ObjectDataSource ID="AlbumListODS" runat="server" 
             DataObjectTypeName="ChinookSystem.ViewModels.AlbumItem" 
             DeleteMethod="Albums_Delete" 
             InsertMethod="Albums_Add" 
-            SelectMethod="Albums_List" 
+            SelectMethod="Albums_List"
             UpdateMethod="Albums_Update"
-            OnDeleted="DeleteCheckForException"
-            OnInserted="InsertCheckForException"
-            OnUpdated="UpdatedCheckForException"
-            OnSelected="SelectCheckForException"
+             OnDeleted="DeleteCheckForException"
+             OnInserted="InsertCheckForException"
+             OnSelected="SelectCheckForException"
+             OnUpdated="UpdateCheckForException"
             OldValuesParameterFormatString="original_{0}" 
-            TypeName="ChinookSystem.BLL.AlbumController" >
+            TypeName="ChinookSystem.BLL.AlbumController" 
+            >
         </asp:ObjectDataSource>
-
-        <%-- ODS for ArtistList DDL --%>
         <asp:ObjectDataSource ID="ArtistListODS" runat="server" 
             OldValuesParameterFormatString="original_{0}" 
             SelectMethod="Artists_DDLList" 
+             OnSelected="SelectCheckForException"
             TypeName="ChinookSystem.BLL.ArtistController">
 
         </asp:ObjectDataSource>
-        </div>
+      </div>
     </div>
-
-        
 </asp:Content>

@@ -15,24 +15,26 @@ namespace WebApp.SamplePages
         }
 
         #region Error Handling
-        protected void SelectCheckForException(object sender, ObjectDataSourceStatusEventArgs e)
+        protected void SelectCheckForException(object sender,
+               ObjectDataSourceStatusEventArgs e)
         {
             MessageUserControl.HandleDataBoundException(e);
         }
-
-        protected void InsertCheckForException(object sender, ObjectDataSourceStatusEventArgs e)
+        protected void InsertCheckForException(object sender,
+              ObjectDataSourceStatusEventArgs e)
         {
-            if(e.Exception == null)
+            if (e.Exception == null)
             {
-                MessageUserControl.ShowInfo("Process Success", "Album has been added");
+                MessageUserControl.ShowInfo("Process Success","Album has been added");
             }
-            else 
+            else
             {
                 MessageUserControl.HandleDataBoundException(e);
             }
+           
         }
-
-        protected void UpdatedCheckForException(object sender, ObjectDataSourceStatusEventArgs e)
+        protected void UpdateCheckForException(object sender,
+             ObjectDataSourceStatusEventArgs e)
         {
             if (e.Exception == null)
             {
@@ -42,9 +44,10 @@ namespace WebApp.SamplePages
             {
                 MessageUserControl.HandleDataBoundException(e);
             }
-        }
 
-        protected void DeleteCheckForException(object sender, ObjectDataSourceStatusEventArgs e)
+        }
+        protected void DeleteCheckForException(object sender,
+             ObjectDataSourceStatusEventArgs e)
         {
             if (e.Exception == null)
             {
@@ -54,8 +57,8 @@ namespace WebApp.SamplePages
             {
                 MessageUserControl.HandleDataBoundException(e);
             }
+
         }
         #endregion
-
     }
 }

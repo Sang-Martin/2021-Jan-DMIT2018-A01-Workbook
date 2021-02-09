@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 
-#region Additional Namespaces
+#region Additional Namespace
 using ChinookSystem.Entities;
 #endregion
 
