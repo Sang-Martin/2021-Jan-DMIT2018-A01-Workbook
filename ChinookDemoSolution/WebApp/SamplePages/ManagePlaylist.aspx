@@ -2,6 +2,9 @@
     AutoEventWireup="true" CodeBehind="ManagePlaylist.aspx.cs" 
     Inherits="WebApp.SamplePages.ManagePlaylist" %>
 
+<%@ Register Src="~/UserControls/MessageUserControl.ascx" TagPrefix="uc1" TagName="MessageUserControl" %>
+
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <div>
@@ -10,7 +13,7 @@
 <div class="row">
     <div class="offset-1">
          <%--Add MessageUserControl--%>
-
+        <uc1:MessageUserControl runat="server" ID="MessageUserControl" />
     </div>
 </div>
    
@@ -45,7 +48,7 @@
     <div class="col-sm-9">
         <asp:Label ID="Label5" runat="server" Text="Tracks"></asp:Label>&nbsp;&nbsp;
         <asp:Label ID="TracksBy" runat="server" ></asp:Label>&nbsp;&nbsp;
-        <asp:Label ID="SearchArg" runat="server" ></asp:Label><br />
+        <asp:HiddenField ID="SearchArg" runat="server" Visible="true" />
         <asp:ListView ID="TracksSelectionList" runat="server"
             DataSourceID="TrackSelectionListODS"
             OnItemCommand="TracksSelectionList_ItemCommand"
@@ -55,10 +58,14 @@
                     <td>
                         <asp:LinkButton ID="AddtoPlaylist" runat="server"
                              CssClass="btn" CommandArgument='<%# Eval("TrackID") %>'>
-                            <span aria-hidden="true" class="glyphicon glyphicon-plus">&nbsp;</span>
+                            <i class="fa fa-plus" style="color:red; font-size:2em;"></i>&nbsp;
                         </asp:LinkButton>
                         </td>
                     <td>
+<%--                    hiding a second control within a single column
+                        your code between would still have access to this data for processing
+                        <asp:Label Text='<%# Eval("TrackID") %>' runat="server" ID="TrackIDLabel"
+                            visible="false"></asp:Label>--%>
                         <asp:Label Text='<%# Eval("Name") %>' runat="server" ID="NameLabel" /></td>
                     <td>
                         <asp:Label Text='<%# Eval("Title") %>' runat="server" ID="TitleLabel" /></td>
@@ -90,7 +97,7 @@
                     <td>
                        <asp:LinkButton ID="AddtoPlaylist" runat="server"
                              CssClass="btn" CommandArgument='<%# Eval("TrackID") %>'>
-                            <span aria-hidden="true" class="glyphicon glyphicon-plus">&nbsp;</span>
+                            <i class="fa fa-plus" style="color:red; font-size:2em;"></i>&nbsp;
                         </asp:LinkButton>
                     </td>
                     <td>
@@ -116,7 +123,8 @@
                 <table runat="server">
                     <tr runat="server">
                         <td runat="server">
-                            <table runat="server" id="itemPlaceholderContainer" style="background-color: #FFFFFF; border-collapse: collapse; border-color: #999999; border-style: none; border-width: 1px; font-family: Verdana, Arial, Helvetica, sans-serif;" border="1">
+                            <table runat="server" id="itemPlaceholderContainer" 
+                                style="background-color: #FFFFFF; border-collapse: collapse; border-color: #999999; border-style: none; border-width: 1px; font-family: Verdana, Arial, Helvetica, sans-serif;" border="1">
                                 <tr runat="server" style="background-color: #E0FFFF; color: #333333;">
                                     <th runat="server">TrackID</th>
                                     <th runat="server">Name</th>
@@ -133,7 +141,10 @@
                         </td>
                     </tr>
                     <tr runat="server">
-                        <td runat="server" style="text-align: center; background-color: #5D7B9D; font-family: Verdana, Arial, Helvetica, sans-serif; color: #FFFFFF">
+                        <td runat="server" style="text-align: center; 
+                                    background-color: #c0c0c0; 
+                                    font-family: Verdana, Arial, Helvetica, sans-serif; 
+                                    color: #FFFFFF">
                             <asp:DataPager runat="server" ID="DataPager1" PageSize="5" PagedControlID="TracksSelectionList">
                                 <Fields>
                                     <asp:NextPreviousPagerField ButtonType="Button" ShowFirstPageButton="True" ShowNextPageButton="False" ShowPreviousPageButton="False"></asp:NextPreviousPagerField>
@@ -161,7 +172,7 @@
         </asp:LinkButton>&nbsp;&nbsp;
         <asp:LinkButton ID="MoveDown" runat="server"
                 CssClass="btn" OnClick="MoveDown_Click" >
-            <i class="fa fa-chevron-up" style="color:blue; font-size:2em;"></i>&nbsp;
+            <i class="fa fa-chevron-down" style="color:blue; font-size:2em;"></i>&nbsp;
         </asp:LinkButton>&nbsp;&nbsp;
         <asp:LinkButton ID="DeleteTrack" runat="server"
                 CssClass="btn" OnClick="DeleteTrack_Click"  >
@@ -215,20 +226,25 @@
     </div>
 
 </div>
- 
+    
     <asp:ObjectDataSource ID="GenreDDLODS" runat="server" 
         OldValuesParameterFormatString="original_{0}" 
         SelectMethod="List_GenreNames" 
+         OnSelected ="SelectCheckForException"
         TypeName="ChinookSystem.BLL.GenreController">
     </asp:ObjectDataSource>
    
     <asp:ObjectDataSource ID="TrackSelectionListODS" runat="server" 
         OldValuesParameterFormatString="original_{0}" 
         SelectMethod="List_TracksForPlaylistSelection" 
-        TypeName="ChinookSystem.BLL.TrackController" >
+         OnSelected="SelectCheckForException"
+        TypeName="ChinookSystem.BLL.TrackController">
+
         <SelectParameters>
-            <asp:ControlParameter ControlID="TracksBy" PropertyName="Text" Name="tracksby" Type="String"></asp:ControlParameter>
-            <asp:ControlParameter ControlID="SearchArg" PropertyName="Text" Name="arg" Type="String"></asp:ControlParameter>
+            <asp:ControlParameter ControlID="TracksBy" PropertyName="Text" 
+                DefaultValue="zxcv" Name="tracksby" Type="String"></asp:ControlParameter>
+            <asp:ControlParameter ControlID="SearchArg" PropertyName="Value" 
+                DefaultValue="vcxfz" Name="arg" Type="String"></asp:ControlParameter>
         </SelectParameters>
     </asp:ObjectDataSource>
 
